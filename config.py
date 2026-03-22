@@ -1,5 +1,6 @@
-from pydantic_settings import BaseSettings
+import os
 from functools import lru_cache
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -9,11 +10,11 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 120
 
     # MongoDB
-    mongodb_uri: str = "mongodb://localhost:27017"
+    mongodb_uri: str = ""
     mongodb_db_name: str = "ai_job_assistant"
 
     # CORS
-    allowed_origins: str = "http://localhost:5173,http://localhost:3000"
+    allowed_origins: str = "*"
 
     # Email
     mail_username: str = ""
@@ -29,6 +30,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         case_sensitive = False
+        extra = "ignore"   # ✅ ignore any extra env vars like MAIL_STARTTLS
 
 
 @lru_cache
