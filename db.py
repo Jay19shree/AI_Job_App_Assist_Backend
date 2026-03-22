@@ -1,16 +1,18 @@
-import os
 import logging
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 
 logger = logging.getLogger(__name__)
 
-# Read directly from environment variable — no fallback to localhost
-MONGODB_URI = os.environ.get("MONGODB_URI")
-DB_NAME = os.environ.get("MONGODB_DB_NAME", "ai_job_assistant")
+# Import settings which properly reads from .env file
+from config import get_settings
+settings = get_settings()
+
+MONGODB_URI = settings.mongodb_uri
+DB_NAME = settings.mongodb_db_name
 
 if not MONGODB_URI:
-    raise RuntimeError("MONGODB_URI environment variable is not set!")
+    raise RuntimeError("MONGODB_URI is not set in .env file!")
 
 try:
     _client = MongoClient(MONGODB_URI, serverSelectionTimeoutMS=5000)
